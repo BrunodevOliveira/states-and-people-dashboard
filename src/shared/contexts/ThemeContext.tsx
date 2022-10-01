@@ -25,19 +25,21 @@ export const useAppThemeContext = () => {
 interface IThemeProviderProps {
   children: React.ReactNode;
 }
-//^ 2° Método que fornece os dados retornados para toda aplicação em App.tsx
+//^ 2° Crio um componente que compartilha o contexto. Método que fornece os dados retornados para toda aplicação em App.tsx
 export const AppThemeProvider: React.FC<IThemeProviderProps> = ({
   children,
 }) => {
+  //armazena os nomes dos temas da aplicação
   const [themeName, setThemeName] = useState<"light" | "dark">("light");
 
+  // Altera o tema da aplicação
   const toggleTheme = useCallback(() => {
     setThemeName((oldThemeName) =>
       oldThemeName === "light" ? "dark" : "light"
     );
   }, []);
 
-  // Toda vez que o tema for alterado essa função será executada
+  // Toda vez que o themeName for alterado, a função dentro de useMemo será executada e seu retorno será armazenado em theme
   const theme = useMemo(() => {
     if (themeName === "light") return LightTheme;
 
@@ -50,7 +52,7 @@ export const AppThemeProvider: React.FC<IThemeProviderProps> = ({
         <Box
           width="100vw"
           height="100vh"
-          bgcolor={theme.palette.background.default}
+          bgcolor={theme.palette.background.default} //aplica a cor definada no tema claro ou escuro
         >
           {children}
         </Box>
