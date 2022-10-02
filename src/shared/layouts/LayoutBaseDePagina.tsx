@@ -12,13 +12,16 @@ import { useDrawerContext } from "../contexts";
 interface ILayoutBaseDePaginaProps {
   children: React.ReactNode;
   titulo: string;
+  barraDeFerramentas?: React.ReactNode;
 }
 
 export const LayoutBaseDePagina: React.FC<ILayoutBaseDePaginaProps> = ({
   children,
   titulo,
+  barraDeFerramentas,
 }) => {
   const smDown = useMediaQuery((theme: Theme) => theme.breakpoints.down("sm")); //Retorna true caso o tamanho da tela seja menor que sm
+  const mdDown = useMediaQuery((theme: Theme) => theme.breakpoints.down("md")); //Retorna true caso o tamanho da tela seja menor que md
   const theme = useTheme();
 
   const { toggleDrawerOpen } = useDrawerContext();
@@ -29,7 +32,7 @@ export const LayoutBaseDePagina: React.FC<ILayoutBaseDePaginaProps> = ({
         padding={1}
         display="flex"
         alignItems="center"
-        height={theme.spacing(12)}
+        height={theme.spacing(smDown ? 6 : mdDown ? 8 : 12)}
         gap={1}
       >
         {smDown && (
@@ -38,10 +41,20 @@ export const LayoutBaseDePagina: React.FC<ILayoutBaseDePaginaProps> = ({
           </IconButton>
         )}
         {/*Typography-> define uma fonte e estilo padrão do MUI */}
-        <Typography variant="h5">{titulo}</Typography>
+        <Typography
+          variant={smDown ? "h5" : mdDown ? "h4" : "h3"}
+          whiteSpace="nowrap"
+          overflow="hidden"
+          textOverflow="ellipses"
+        >
+          {titulo}
+        </Typography>
       </Box>
-      <Box>Barra de ferramentas</Box>
-      <Box>{children}</Box> {/* Ocupa todo o espaço disponível*/}
+      {barraDeFerramentas && <Box>{barraDeFerramentas}</Box>}
+      <Box flex={1} overflow="auto">
+        {children}
+      </Box>{" "}
+      {/* Ocupa todo o espaço disponível*/}
     </Box>
   );
 };
