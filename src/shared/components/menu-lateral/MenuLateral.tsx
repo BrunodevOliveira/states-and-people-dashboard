@@ -9,33 +9,28 @@ import {
   ListItemText,
   useMediaQuery,
   useTheme,
-} from "@mui/material";
-import { Box } from "@mui/system";
-import { useMatch, useNavigate, useResolvedPath } from "react-router-dom";
-import { useDrawerContext } from "../../contexts";
+} from "@mui/material"
+import { Box } from "@mui/system"
+import { useMatch, useNavigate, useResolvedPath } from "react-router-dom"
+import { useAppThemeContext, useDrawerContext } from "../../contexts"
 
 interface IListItemLinkProps {
-  label: string;
-  icon: string;
-  to: string;
-  onClick?: () => void;
+  label: string
+  icon: string
+  to: string
+  onClick?: () => void
 }
-const ListItemLink: React.FC<IListItemLinkProps> = ({
-  to,
-  icon,
-  label,
-  onClick,
-}) => {
-  const navigate = useNavigate();
+const ListItemLink: React.FC<IListItemLinkProps> = ({ to, icon, label, onClick }) => {
+  const navigate = useNavigate()
 
-  const resolvedPath = useResolvedPath(to);
+  const resolvedPath = useResolvedPath(to)
   //Verifica se na url do navegador existe tem a opção do menu selecionado
-  const match = useMatch({ path: resolvedPath.pathname, end: false });
+  const match = useMatch({ path: resolvedPath.pathname, end: false })
 
   const handleClick = () => {
-    navigate(to);
-    onClick?.(); //.? -> verifica se a função é undefined antes de tentar executar
-  };
+    navigate(to)
+    onClick?.() //.? -> verifica se a função é undefined antes de tentar executar
+  }
 
   return (
     <ListItemButton selected={!!match} onClick={handleClick}>
@@ -44,18 +39,19 @@ const ListItemLink: React.FC<IListItemLinkProps> = ({
       </ListItemIcon>
       <ListItemText primary={label} />
     </ListItemButton>
-  );
-};
+  )
+}
 
 interface IMenuLateralProps {
-  children: React.ReactNode;
+  children: React.ReactNode
 }
 
 export const MenuLateral: React.FC<IMenuLateralProps> = ({ children }) => {
-  const theme = useTheme(); //Consegue acessar o tema base da aplicação. O método spacing aplica uma unidade de medida em que 1 equivale a 4px
-  const smDown = useMediaQuery(theme.breakpoints.down("sm")); //retorna true caso a tela estiver a baixo de sm
+  const theme = useTheme() //Consegue acessar o tema base da aplicação. O método spacing aplica uma unidade de medida em que 1 equivale a 4px
+  const smDown = useMediaQuery(theme.breakpoints.down("sm")) //retorna true caso a tela estiver a baixo de sm
 
-  const { isDrawerOpen, toggleDrawerOpen, drawerOptions } = useDrawerContext();
+  const { isDrawerOpen, toggleDrawerOpen, drawerOptions } = useDrawerContext()
+  const { toggleTheme } = useAppThemeContext()
 
   return (
     <>
@@ -65,12 +61,7 @@ export const MenuLateral: React.FC<IMenuLateralProps> = ({ children }) => {
         onClose={toggleDrawerOpen}
       >
         {/* variant -> Configura o modo de exibição do menu*/}
-        <Box
-          width={theme.spacing(28)}
-          height="100%"
-          display="flex"
-          flexDirection="column"
-        >
+        <Box width={theme.spacing(28)} height="100%" display="flex" flexDirection="column">
           <Box
             width="100%"
             height={theme.spacing(20)}
@@ -98,11 +89,22 @@ export const MenuLateral: React.FC<IMenuLateralProps> = ({ children }) => {
               ))}
             </List>
           </Box>
+
+          <Box>
+            <List component="nav">
+              <ListItemButton onClick={toggleTheme}>
+                <ListItemIcon>
+                  <Icon>dark_mode</Icon>
+                </ListItemIcon>
+                <ListItemText primary="Alternar tema" />
+              </ListItemButton>
+            </List>
+          </Box>
         </Box>
       </Drawer>
       <Box height="100vh" marginLeft={smDown ? 0 : theme.spacing(28)}>
         {children} {/*conteúdo da página*/}
       </Box>
     </>
-  );
-};
+  )
+}

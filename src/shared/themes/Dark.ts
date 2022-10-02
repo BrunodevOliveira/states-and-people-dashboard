@@ -1,8 +1,9 @@
-import { createTheme } from "@mui/material";
-import { yellow, cyan } from "@mui/material/colors";
+import { createTheme } from "@mui/material"
+import { yellow, cyan } from "@mui/material/colors"
 
 export const DarkTheme = createTheme({
   palette: {
+    mode: "dark",
     primary: {
       main: yellow[700],
       dark: yellow[800],
@@ -20,4 +21,11 @@ export const DarkTheme = createTheme({
       paper: "#303134",
     },
   },
-});
+  typography: {
+    //Aplica as configs para todas as tags de typography
+    allVariants: {
+      //Aplica para todas as variações da tag typography
+      color: "white", //Altera a cor dos elementos da tag quando o tema é trocado
+    },
+  },
+})
