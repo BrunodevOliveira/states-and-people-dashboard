@@ -1,8 +1,10 @@
 import axios from "axios";
+
+import { Enviroment } from "./../../../environment/index";
 import { errorInterceptor, responseInterceptor } from "./interceptors";
 
 const Api = axios.create({
-  baseURL: "http://localhost:3333",
+  baseURL: Enviroment.URL_BASE,
 });
 
 //^Interceptor -> são middlewares criados através de funções que posso utilizar conforme a resposta do servidor

@@ -1,12 +1,14 @@
-import { Box, Button, Icon, Paper, TextField, useTheme } from "@mui/material"
+import { Box, Button, Icon, Paper, TextField, useTheme } from "@mui/material";
+
+import { Enviroment } from "../../environment";
 
 interface IFerramentasDaListagemProps {
-  textoDaBusca?: string
-  mostrarInputBusca?: boolean
-  aoMudarTextoDeBusca?: (novoTexto: string) => void
-  textoBotaoNovo?: string
-  mostrarBotaoNovo?: boolean
-  aoClicarEmNovo?: () => void
+  textoDaBusca?: string;
+  mostrarInputBusca?: boolean;
+  aoMudarTextoDeBusca?: (novoTexto: string) => void;
+  textoBotaoNovo?: string;
+  mostrarBotaoNovo?: boolean;
+  aoClicarEmNovo?: () => void;
 }
 
 export const FerramentasDaListagem: React.FC<IFerramentasDaListagemProps> = ({
@@ -17,7 +19,7 @@ export const FerramentasDaListagem: React.FC<IFerramentasDaListagemProps> = ({
   mostrarBotaoNovo = true,
   aoClicarEmNovo,
 }) => {
-  const theme = useTheme()
+  const theme = useTheme();
 
   return (
     <Box
@@ -33,7 +35,7 @@ export const FerramentasDaListagem: React.FC<IFerramentasDaListagemProps> = ({
       {mostrarInputBusca && (
         <TextField
           size="small"
-          placeholder="Pesquisar.."
+          placeholder={Enviroment.INPUT_DE_BUSCA}
           value={textoDaBusca}
           onChange={(e) => aoMudarTextoDeBusca?.(e.target.value)}
         />
@@ -52,5 +54,5 @@ export const FerramentasDaListagem: React.FC<IFerramentasDaListagemProps> = ({
         )}
       </Box>
     </Box>
-  )
-}
+  );
+};
