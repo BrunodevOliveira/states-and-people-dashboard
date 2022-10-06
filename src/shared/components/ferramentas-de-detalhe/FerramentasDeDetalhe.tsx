@@ -8,29 +8,29 @@ import {
   Typography,
   useMediaQuery,
   useTheme,
-} from "@mui/material"
-import { Theme } from "@mui/system"
+} from "@mui/material";
+import { Theme } from "@mui/system";
 
 interface IFerramentasDeDetalheProps {
-  textoBotaoNovo?: string
+  textoBotaoNovo?: string;
 
-  mostrarBotaoNovo?: boolean
-  mostrarBotaoVoltar?: boolean
-  mostrarBotaoApagar?: boolean
-  mostrarBotaoSalvar?: boolean
-  mostrarBotaoSalvarEFechar?: boolean
+  mostrarBotaoNovo?: boolean;
+  mostrarBotaoVoltar?: boolean;
+  mostrarBotaoApagar?: boolean;
+  mostrarBotaoSalvar?: boolean;
+  mostrarBotaoSalvarEFechar?: boolean;
 
-  mostrarBotaoNovoCarregando?: boolean
-  mostrarBotaoVoltarCarregando?: boolean
-  mostrarBotaoApagarCarregando?: boolean
-  mostrarBotaoSalvarCarregando?: boolean
-  mostrarBotaoSalvarEFecharCarregando?: boolean
+  mostrarBotaoNovoCarregando?: boolean;
+  mostrarBotaoVoltarCarregando?: boolean;
+  mostrarBotaoApagarCarregando?: boolean;
+  mostrarBotaoSalvarCarregando?: boolean;
+  mostrarBotaoSalvarEFecharCarregando?: boolean;
 
-  aoClicarEmNovo?: () => void
-  aoClicarEmVoltar?: () => void
-  aoClicarEmApagar?: () => void
-  aoClicarEmSalvar?: () => void
-  aoClicarEmSalvarEFechar?: () => void
+  aoClicarEmNovo?: () => void;
+  aoClicarEmVoltar?: () => void;
+  aoClicarEmApagar?: () => void;
+  aoClicarEmSalvar?: () => void;
+  aoClicarEmSalvarEFechar?: () => void;
 }
 
 export const FerramentasDeDetalhe: React.FC<IFerramentasDeDetalheProps> = ({
@@ -54,13 +54,13 @@ export const FerramentasDeDetalhe: React.FC<IFerramentasDeDetalheProps> = ({
   aoClicarEmNovo,
   aoClicarEmVoltar,
 }) => {
-  const theme = useTheme()
-  const smDown = useMediaQuery((theme: Theme) => theme.breakpoints.down("sm")) //Retorna true caso o tamanho da tela seja menor que sm
-  const mdDown = useMediaQuery((theme: Theme) => theme.breakpoints.down("md")) //Retorna true caso o tamanho da tela seja menor que md
+  const theme = useTheme();
+  const smDown = useMediaQuery((theme: Theme) => theme.breakpoints.down("sm")); //Retorna true caso o tamanho da tela seja menor que sm
+  const mdDown = useMediaQuery((theme: Theme) => theme.breakpoints.down("md")); //Retorna true caso o tamanho da tela seja menor que md
 
   const renderizar = {
     btnSalvar: mostrarBotaoSalvar && !mostrarBotaoSalvarCarregando,
-    btnSalvarEVoltar:
+    btnSalvarEFechar:
       mostrarBotaoSalvarEFechar && !mostrarBotaoSalvarEFecharCarregando && !smDown && !mdDown, //Só mostro esse botão se a tela for maior que MD
     btnApagar: mostrarBotaoApagar && !mostrarBotaoApagarCarregando,
     btnNovo: mostrarBotaoNovo && !mostrarBotaoNovoCarregando && !smDown,
@@ -68,7 +68,7 @@ export const FerramentasDeDetalhe: React.FC<IFerramentasDeDetalheProps> = ({
     divider:
       mostrarBotaoVoltar &&
       (mostrarBotaoNovo || mostrarBotaoApagar || mostrarBotaoSalvar || mostrarBotaoSalvarEFechar),
-  }
+  };
 
   return (
     <Box
@@ -102,7 +102,7 @@ export const FerramentasDeDetalhe: React.FC<IFerramentasDeDetalheProps> = ({
 
       {mostrarBotaoSalvarCarregando && <Skeleton width={110} height={60} />}
 
-      {renderizar.btnSalvarEVoltar && (
+      {renderizar.btnSalvarEFechar && (
         <Button
           variant="outlined"
           color="primary"
@@ -111,7 +111,7 @@ export const FerramentasDeDetalhe: React.FC<IFerramentasDeDetalheProps> = ({
           onClick={aoClicarEmSalvarEFechar}
         >
           <Typography variant="button" noWrap>
-            Salvar e voltar
+            Salvar e fechar
           </Typography>
         </Button>
       )}
@@ -170,5 +170,5 @@ export const FerramentasDeDetalhe: React.FC<IFerramentasDeDetalheProps> = ({
 
       {mostrarBotaoVoltarCarregando && <Skeleton width={110} height={60} />}
     </Box>
-  )
-}
+  );
+};
