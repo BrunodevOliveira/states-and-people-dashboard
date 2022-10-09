@@ -1,14 +1,14 @@
 import { Enviroment } from "../../../environment";
 import { Api } from "../axios-config";
 
-interface IListagemPessoa {
+export interface IListagemPessoa {
   id: number;
   email: string;
   cidadeId: number; //representa o relalcionamento entre a pessoa e a cidade
   nomeCompleto: string;
 }
 
-interface IDetalhePessoa {
+export interface IDetalhePessoa {
   id: number;
   email: string;
   cidadeId: number; //representa o relalcionamento entre a pessoa e a cidade
