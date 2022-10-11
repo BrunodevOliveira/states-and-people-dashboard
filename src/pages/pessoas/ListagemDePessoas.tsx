@@ -10,6 +10,7 @@ import {
   Paper,
   TableFooter,
   LinearProgress,
+  Pagination,
 } from "@mui/material";
 
 import { FerramentasDaListagem } from "../../shared/components";
@@ -30,11 +31,15 @@ export const ListagemDePessoas: React.FC = () => {
     return searchParams.get("busca") || ""; //retorna o texto salvo na chave "busca" que foi passado no setSearchParams
   }, [searchParams]);
 
+  const pagina = useMemo(() => {
+    return Number(searchParams.get("pagina") || "1"); //Precisa ser number para que seja aceito no componente de paginação
+  }, [searchParams]);
+
   useEffect(() => {
     setIsLoading(true);
 
     debounce(() => {
-      PessoasService.getAll(1, busca).then((result) => {
+      PessoasService.getAll(pagina, busca).then((result) => {
         setIsLoading(false);
         //essa verificação é melhor que catch pois com ela aproveitamos o tipo que result possui
         if (result instanceof Error) return alert(result.message);
@@ -44,7 +49,7 @@ export const ListagemDePessoas: React.FC = () => {
         setTotalCount(result.totalCount);
       });
     });
-  }, [busca, debounce]);
+  }, [busca, debounce, pagina]);
 
   function renderRowTable(data: IListagemPessoa) {
     return (
@@ -64,7 +69,9 @@ export const ListagemDePessoas: React.FC = () => {
           textoBotaoNovo="Nova"
           mostrarInputBusca
           textoDaBusca={busca}
-          aoMudarTextoDeBusca={(texto) => setSearchParams({ busca: texto }, { replace: true })}
+          aoMudarTextoDeBusca={(texto) =>
+            setSearchParams({ busca: texto, pagina: "1" }, { replace: true })
+          }
         />
       }
     >
@@ -84,6 +91,20 @@ export const ListagemDePessoas: React.FC = () => {
               <TableRow>
                 <TableCell colSpan={3}>
                   <LinearProgress variant="indeterminate" />
+                </TableCell>
+              </TableRow>
+            )}
+            {totalCount > Enviroment.LIMITE_DE_LINHAS && (
+              <TableRow>
+                <TableCell colSpan={3}>
+                  <Pagination
+                    page={pagina}
+                    count={Math.ceil(totalCount / Enviroment.LIMITE_DE_LINHAS)}
+                    onChange={
+                      (_, newPage) =>
+                        setSearchParams({ busca, pagina: newPage.toString() }, { replace: true }) //replace-> guarda o histórico de navegação entre as páginas
+                    }
+                  />
                 </TableCell>
               </TableRow>
             )}
