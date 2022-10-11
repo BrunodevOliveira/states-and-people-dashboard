@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   TableContainer,
   Table,
@@ -11,6 +11,8 @@ import {
   TableFooter,
   LinearProgress,
   Pagination,
+  IconButton,
+  Icon,
 } from "@mui/material";
 
 import { FerramentasDaListagem } from "../../shared/components";
@@ -22,6 +24,7 @@ import { Enviroment } from "../../shared/environment";
 export const ListagemDePessoas: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams(); //Parecido com o state, mas com ele podemos enviar os dados pesquisados para a url
   const { debounce } = useDebounce();
+  const navigate = useNavigate();
 
   const [rows, setRows] = useState<IListagemPessoa[]>([]);
   const [totalCount, setTotalCount] = useState(0); //guarda o total de registros do BD
@@ -51,10 +54,31 @@ export const ListagemDePessoas: React.FC = () => {
     });
   }, [busca, debounce, pagina]);
 
+  const handleDelete = (id: number) => {
+    if (window.confirm("Realmente deseja apagar?")) {
+      //confirm-> pergunta ao usuário se confirma que quer apagar o registro e retorna um booleano
+      PessoasService.deleteById(id).then((result) => {
+        if (result instanceof Error) {
+          alert(result.message);
+        } else {
+          alert("Registro apagado com sucesso");
+          setRows((oldRows) => [...oldRows.filter((oldRow) => oldRow.id !== id)]);
+        }
+      });
+    }
+  };
+
   function renderRowTable(data: IListagemPessoa) {
     return (
       <TableRow key={data.id}>
-        <TableCell>Ações</TableCell>
+        <TableCell>
+          <IconButton size="small" onClick={() => handleDelete(data.id)}>
+            <Icon>delete</Icon>
+          </IconButton>
+          <IconButton size="small" onClick={() => navigate(`/pessoas/detalhe/${data.id}`)}>
+            <Icon>edit</Icon>
+          </IconButton>
+        </TableCell>
         <TableCell>{data.nomeCompleto}</TableCell>
         <TableCell>{data.email}</TableCell>
       </TableRow>

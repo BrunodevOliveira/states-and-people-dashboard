@@ -89,12 +89,6 @@
       "cidadeId": 1,
       "email": "pedro@gmail.com",
       "nomeCompleto": "Pedro Silva"
-    },
-    {
-      "id": 16,
-      "cidadeId": 1,
-      "email": "alfredo@gmail.com",
-      "nomeCompleto": "Alfredo Silva"
     }
   ]
 }
