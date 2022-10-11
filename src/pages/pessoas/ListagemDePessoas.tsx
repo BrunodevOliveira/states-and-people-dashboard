@@ -8,12 +8,15 @@ import {
   TableRow,
   TableCell,
   Paper,
+  TableFooter,
+  LinearProgress,
 } from "@mui/material";
 
 import { FerramentasDaListagem } from "../../shared/components";
 import { useDebounce } from "../../shared/hooks";
 import { LayoutBaseDePagina } from "../../shared/layouts";
 import { IListagemPessoa, PessoasService } from "../../shared/services/api/pessoas/PessoasService";
+import { Enviroment } from "../../shared/environment";
 
 export const ListagemDePessoas: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams(); //Parecido com o state, mas com ele podemos enviar os dados pesquisados para a url
@@ -75,6 +78,16 @@ export const ListagemDePessoas: React.FC = () => {
             </TableRow>
           </TableHead>
           <TableBody>{rows.map(renderRowTable)}</TableBody>
+          {totalCount === 0 && !isLoading && <caption>{Enviroment.LISTAGEM_VAZIA}</caption>}
+          <TableFooter>
+            {isLoading && (
+              <TableRow>
+                <TableCell colSpan={3}>
+                  <LinearProgress variant="indeterminate" />
+                </TableCell>
+              </TableRow>
+            )}
+          </TableFooter>
         </Table>
       </TableContainer>
     </LayoutBaseDePagina>
