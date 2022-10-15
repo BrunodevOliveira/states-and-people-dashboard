@@ -1,24 +1,24 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { LinearProgress } from "@mui/material";
 
 import { FerramentasDeDetalhe } from "../../shared/components";
 import { LayoutBaseDePagina } from "../../shared/layouts";
 import { PessoasService } from "../../shared/services/api/pessoas/PessoasService";
+import { Form } from "@unform/web";
+import { VtextField } from "../../shared/forms";
 
 export const DetalheDePessoas: React.FC = () => {
   const { id = "nova" } = useParams<"id">(); // Dessa forma obtenho a variável id da rota (tipo o useParams com a var que qeuro extrair da rota)
   const navigate = useNavigate();
 
-  const [isLoading, setIsLoading] = useState(false);
   const [nome, setNome] = useState("");
 
   useEffect(() => {
     if (id !== "nova") {
-      setIsLoading(true);
+      // setIsLoading(true);
 
       PessoasService.getById(Number(id)).then((result) => {
-        setIsLoading(false);
+        // setIsLoading(false);
         if (result instanceof Error) {
           alert(result.message);
           navigate("/pessoas");
@@ -63,8 +63,9 @@ export const DetalheDePessoas: React.FC = () => {
         />
       }
     >
-      {isLoading && <LinearProgress />}
-      <p>DetalheDePessoas {id}</p>
+      <Form onSubmit={console.log}>
+        <VtextField name="nomeCompleto" />
+      </Form>
     </LayoutBaseDePagina>
   );
 };
