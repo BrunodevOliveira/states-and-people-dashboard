@@ -30,7 +30,7 @@ export const VtextField: React.FC<TVTextFieldProps> = ({ name, ...rest }) => {
   return (
     <TextField
       {...rest}
-      error={!!error} //primeiro exclamação transforma o valor para booleano, o segundo deixa esse valor como false
+      error={!!error} //primeiro exclamação transforma o valor para booleano, o segundo deixa esse valor como true
       helperText={error}
       defaultValue={defaultValue}
       value={value}
