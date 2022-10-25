@@ -1,16 +1,16 @@
-import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { FormHandles } from "@unform/core";
+import { Form } from "@unform/web";
 
 import { FerramentasDeDetalhe } from "../../shared/components";
 import { LayoutBaseDePagina } from "../../shared/layouts";
 import { PessoasService } from "../../shared/services/api/pessoas/PessoasService";
-import { Form } from "@unform/web";
 import { VtextField } from "../../shared/forms";
-import { FormHandles } from "@unform/core";
 
 interface IFormData {
   email: string;
-  cidadeId: string;
+  cidadeId: number;
   nomeCompleto: string;
 }
 
@@ -20,20 +20,21 @@ export const DetalheDePessoas: React.FC = () => {
 
   const formRef = useRef<FormHandles>(null); //Com essa referência posso dar submit no formulário através da ferramenta de detalhes
 
+  const [isloading, setIsLoading] = useState(false);
   const [nome, setNome] = useState("");
 
   useEffect(() => {
     if (id !== "nova") {
-      // setIsLoading(true);
+      setIsLoading(true);
 
       PessoasService.getById(Number(id)).then((result) => {
-        // setIsLoading(false);
+        setIsLoading(false);
         if (result instanceof Error) {
           alert(result.message);
           navigate("/pessoas");
         } else {
-          console.log(result);
           setNome(result.nomeCompleto);
+          formRef.current?.setData(result); //seta os inputs com os ddados da pessoa
         }
       });
     }
@@ -41,7 +42,20 @@ export const DetalheDePessoas: React.FC = () => {
 
   const handleSave = (dados: IFormData) => {
     //Aqui eu trato os dados para que sejam salvos no BD
-    console.log(dados);
+    setIsLoading(true);
+    if (id === "nova") {
+      //se o Id for "nova" significa que estamos criando um novo cadastro
+      PessoasService.create(dados).then((result) => {
+        setIsLoading(false);
+        if (result instanceof Error) return alert(result.message);
+        navigate(`/pessoas/detalhe/${result}`); //depois de criar o usuário o BD retorna o ID dele, com ele podemos redirecionar o usuário
+      });
+    } else {
+      PessoasService.updateById(+id, { id: +id, ...dados }).then((result) => {
+        setIsLoading(false);
+        if (result instanceof Error) return alert(result.message);
+      });
+    }
   };
   const handleDelete = (id: number) => {
     if (window.confirm(`Realmente deseja exlcuir ${nome}?`)) {
@@ -74,11 +88,9 @@ export const DetalheDePessoas: React.FC = () => {
       }
     >
       <Form ref={formRef} onSubmit={handleSave}>
-        <VtextField name="nomeCompleto" />
-        <VtextField name="email" />
-        <VtextField name="cidadeId" />
-
-        <button type="submit">Enviar</button>
+        <VtextField placeholder="Nome completo" name="nomeCompleto" />
+        <VtextField placeholder="Email" name="email" />
+        <VtextField placeholder="Id da cidade" name="cidadeId" />
       </Form>
     </LayoutBaseDePagina>
   );
